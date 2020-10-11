@@ -14,6 +14,5 @@ class Book(models.Model):
                                 ],)
     published = models.DateField(verbose_name='刊行日')
 
-def __str__(self):
-    return f"{self.title}({self.publisher}/{self.price}円)"
-   
+    def __str__(self):
+        return f'{self.title}({self.publisher}/{self.price}円)'
