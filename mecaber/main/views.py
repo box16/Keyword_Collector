@@ -1,14 +1,21 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import JsonResponse
+import datetime
 from .models import Book
+from .script.morphological_analyser import KeyWordCollector
+from .forms import NounCollectForm
+from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_POST
 
 def index(request):
-    return HttpResponse("Hello World!!")
+    form = NounCollectForm()
+    return render(request,"main/index.html",{"form":form})
 
-def temp(request):
-    context = {"msg":"Hello World!!"}
-    return render(request,"main/temp.html",context)
-
-def _list(request):
-    books = Book.objects.all()
-    return render(request,"main/list.html",{"books":books})
+@require_POST
+def index_to_noun_result(request):
+    form = NounCollectForm(request.POST)
+    if form.is_valid():
+        return render(request,"main/noun_result.html",{"form":form})
+    else:
+        return render(request,"main/index.html",{"form":form})
