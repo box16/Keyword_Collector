@@ -15,8 +15,9 @@ def index(request):
 @require_POST
 def index_to_noun_result(request):
     form = NounCollectForm(request.POST)
-    print(request.POST["text"])
+    result_text = KeyWordCollector().noun_collector(request.POST["text"])
+    
     if form.is_valid():
-        return render(request,"main/noun_result.html",{"form":form})
+        return render(request,"main/noun_result.html",{"result_text":result_text})
     else:
         return render(request,"main/index.html",{"form":form})

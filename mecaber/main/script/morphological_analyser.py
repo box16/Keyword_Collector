@@ -9,6 +9,7 @@ class KeyWordCollector():
     def noun_collector(self,text):
         self.mecab_dictionary.parse("")
         text = self.text_cleaner(text)
+
         node = self.mecab_dictionary.parseToNode(text)
         
         result_nouns = []
@@ -29,7 +30,7 @@ class KeyWordCollector():
         is_noun = (node.feature.split(",")[0] == "名詞")
         is_pronoun = (node.feature.split(",")[1] == "代名詞")
         is_legal_word_length = (len(node.surface) >= 3)
-
+        
         return is_noun and is_legal_word_length and not is_pronoun
     
     def make_link_scrapbox(self,text):
