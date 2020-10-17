@@ -4,7 +4,7 @@ import re
 class KeyWordCollector():
 
     def __init__(self):
-        self.mecab_dictionary = MeCab.Tagger('-d /usr/lib/arm-linux-gnueabihf/mecab/dic/mecab-ipadic-neologd')
+        self.mecab_dictionary = MeCab.Tagger('--unk-feature "unknown" -d /usr/lib/arm-linux-gnueabihf/mecab/dic/mecab-ipadic-neologd')
 
     def noun_collector(self,text):
         self.mecab_dictionary.parse("")
@@ -27,11 +27,15 @@ class KeyWordCollector():
         return result_text
     
     def is_legal(self,node):
+        if node.feature == "unknown":
+            return False
+
         is_noun = (node.feature.split(",")[0] == "名詞")
         is_pronoun = (node.feature.split(",")[1] == "代名詞")
+        is_adjectival_noun_trunk = ("動詞" in node.feature.split(",")[1])
         is_legal_word_length = (len(node.surface) >= 3)
         
-        return is_noun and is_legal_word_length and not is_pronoun
+        return is_noun and is_legal_word_length and not is_pronoun and not is_adjectival_noun_trunk
     
     def make_link_scrapbox(self,text):
         text = re.sub('[\s]','_',text)
